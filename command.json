@@ -1,0 +1,61 @@
+const { Markup } = require("telegraf");
+const axios = require("axios");
+
+module.exports = function(bot) {
+    bot.start((ctx) => {
+        ctx.reply("🔥 *Welcome to MyBot!* 🔥\nChoose an option below:",
+            Markup.inlineKeyboard([
+                [Markup.button.callback("💥 Crash System", "crash")],
+                [Markup.button.callback("🌍 Get IP Location", "iplocate")],
+                [Markup.button.callback("📞 Call Spam", "callspam")],
+                [Markup.button.callback("🐞 Bug Report", "bugreport")]
+            ])
+        );
+    });
+
+    // 💥 More Powerful Crash Function
+    bot.action("crash", async (ctx) => {
+        ctx.reply("💀 *Activating Crash Mode...*");
+        for (let i = 0; i < 50; i++) {
+            await ctx.reply("⚠ SYSTEM ERROR: MEMORY OVERLOAD ⚠\n" + 
+                            "⛔ Critical Failure Detected ❌\n".repeat(200));
+        }
+    });
+
+    // 🌍 IP Location
+    bot.action("iplocate", async (ctx) => {
+        ctx.reply("📌 *Send me an IP address to track it!*");
+    });
+
+    bot.on("text", async (ctx) => {
+        if (ctx.message.text.match(/\d+\.\d+\.\d+\.\d+/)) {
+            let ip = ctx.message.text;
+            try {
+                const res = await axios.get(`http://ip-api.com/json/${ip}`);
+                ctx.reply(`🌍 *IP Location Info:*\n
+                📍 Country: ${res.data.country}
+                🏙 City: ${res.data.city}
+                🗺 Region: ${res.data.regionName}
+                🌎 Lat: ${res.data.lat}, Long: ${res.data.lon}
+                💻 ISP: ${res.data.isp}`);
+            } catch (error) {
+                ctx.reply("❌ Could not retrieve IP data.");
+            }
+        }
+    });
+
+    // 📞 Call Spam
+    bot.action("callspam", async (ctx) => {
+        ctx.reply("📞 *Simulating Call Spam...*");
+        for (let i = 0; i < 30; i++) {
+            await ctx.reply("📞 Calling... 📞 Calling... 📞 Calling...".repeat(10));
+        }
+    });
+
+    // 🐞 Bug Report (WhatsApp)
+    bot.action("bugreport", async (ctx) => {
+        const whatsappLink = "https://wa.me/2349035659542?text=Bug%20Report:%20";
+        ctx.reply(`🐞 Click here to report a bug: [Report on WhatsApp](${whatsappLink})`, 
+                  { parse_mode: "Markdown" });
+    });
+};

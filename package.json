@@ -1,0 +1,13 @@
+{
+  "name": "mybot",
+  "version": "1.0.0",
+  "description": "A powerful Telegram bot with WhatsApp integration.",
+  "main": "index.js",
+  "dependencies": {
+    "telegraf": "^4.12.2",
+    "axios": "^1.4.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
